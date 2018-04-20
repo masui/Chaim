@@ -1,9 +1,9 @@
 # coding: utf-8
 #
-# Convert a dict for GyaimMotion to dictdata.js
+# GyaimMotionで使ってる辞書ファイル(dict.txt)をJSに変換
 #
-
-# dictfile = "dict.txt"
+# GyaimMotionでは起動時に変換しているが、遅そうなのであらかじめ変換しておく
+#
 
 class DictEntry
   attr_reader :pat, :word, :inConnection, :outConnection
@@ -21,9 +21,6 @@ end
 
 dict = []
 
-#File.open(dictfile){ |f|
-#  f.each { |line|
-
 ARGF.each { |line|
   line = line.force_encoding('utf-8').chomp
   next if line =~ /^#/
@@ -34,12 +31,21 @@ ARGF.each { |line|
   dict << DictEntry.new(a[0],a[1],a[2].to_i,a[3].to_i)
 }
 
+puts "const dict = ["
+dict.each_with_index { |entry,i|
+  comma = (i == dict.length-1 ? "" : ",")
+  puts "  [\"#{entry.pat}\", \"#{entry.word}\", #{entry.inConnection}, #{entry.outConnection}, #{entry.keyLink}, #{entry.connectionLink}]#{comma}"
+}
+puts "];"
+
 keyLink = []
 connectionLink = []
 # initLink()
 #
 # 先頭読みが同じ単語のリスト
 #
+puts
+puts "var keyLink = [];"
 cur = []
 dict.each_with_index { |entry,i|
   next if entry.word =~ /^\*/
@@ -48,21 +54,26 @@ dict.each_with_index { |entry,i|
   if keyLink[ind].nil? then
     cur[ind] = i
     keyLink[ind] = i
+    puts "keyLink[#{ind}] = #{i};"
   else
     dict[cur[ind]].keyLink = i
     cur[ind] = i
   end
   entry.keyLink = "null"# リンクの末尾
 }
+
 #
 # コネクションつながりのリスト
 #
+puts
+puts "var connectionLink = [];"
 cur = []
 dict.each_with_index { |entry,i|
   ind = entry.inConnection
   if connectionLink[ind].nil? then
     cur[ind] = i
     connectionLink[ind] = i
+    puts "connectionLink[#{ind}] = #{i};"
   else
     dict[cur[ind]].connectionLink = i
     cur[ind] = i
@@ -70,11 +81,5 @@ dict.each_with_index { |entry,i|
   entry.connectionLink = "null" # リンクの末尾
 }
 
-puts "const dict = ["
-dict.each { |entry|
-  puts "  [\"#{entry.pat}\", \"#{entry.word}\", #{entry.inConnection}, #{entry.outConnection}, #{entry.keyLink}, #{entry.connectionLink}],"
-}
-puts "  [\"\", \"\", 0, 0, null, null]"
-puts "];"
 
 
