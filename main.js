@@ -12,6 +12,8 @@ var ctrlKey = false;
 var japaneseMode = false;
 var pat = "";              // 日本語入力パタン e.g. "masui"
 var candidates = [];
+var selectedCand = -1;
+var convMode = 0; // 0:前方一致 1:完全一致/ひらがな
 
 chrome.input.ime.onFocus.addListener(function(context) {
     contextID = context.contextID;
@@ -38,8 +40,13 @@ function searchAndShowCands(){
 	    candidates.push(newword);
 	}
     });
+    selectedCand = -1;
+    showCands();
+}
+
+function showCands(){
     var candmenus = [];
-    for(var i=0;i<3 && i<candidates.length;i++){
+    for(var i=selectedCand+1;i<selectedCand+4 && i<candidates.length;i++){
 	candmenus.push({
 	    candidate:candidates[i],
 	    id:i
@@ -184,13 +191,66 @@ chrome.input.ime.onKeyEvent.addListener(
 
 	if(japaneseMode){
 	    if(keyData.type == "keydown" && keyData.key.match(/^[a-z]$/)){
-		pat += keyData.key;
-		showComposition(pat);
-		searchAndShowCands();
+		if(selectedCand >= 0){
+		    chrome.input.ime.commitText({
+			"contextID": contextID,
+			"text": selectedCand >= 0 ? candidates[selectedCand] : pat
+		    });
+		    selectedCand = -1;
+		    pat = keyData.key;
+		}
+		else {
+		    pat += keyData.key;
+		    showComposition(pat);
+		    searchAndShowCands();
+		}
+		handled = true;
+	    }
+	    if(keyData.type == "keydown" && keyData.key == " "){
+		if(selectedCand < candidates.length-1){
+		    selectedCand += 1;
+		    showComposition(candidates[selectedCand]);
+		    showCands();
+		}
+		handled = true;
+	    }
+	    if(keyData.type == "keydown" && keyData.key == "Enter"){
+		if(selectCand >= 0){
+		    chrome.input.ime.commitText({
+			"contextID": contextID,
+			"text": selectedCand >= 0 ? candidates[selectedCand] : pat
+		    });
+		    pat = "";
+		    selectedCand = -1;
+		    convMode = 0;
+		}
+		else {
+		    candidates = [];
+		    search(pat,1,function(word,pat,connection){
+			var newword = word.replace(/\*/g,'');
+			if(candidates.indexOf(newword) < 0){
+			    candidates.push(newword);
+			}
+		    });
+		    selectedCand = -1;
+		    convMode = 1;
+		    searchAndShowCands();
+		}
 		handled = true;
 	    }
 	    if(keyData.type == "keydown" && keyData.key == "Backspace"){
-		if(pat.length > 0){
+		if(selectedCand >= 0){
+		    selectedCand -= 1;
+		    if(selectedCand < 0){
+			showComposition(pat);
+		    }
+		    else {
+			showComposition(candidates[selectedCand]);
+		    }
+		    showCands();
+		    handled = true;
+		}
+		else if(pat.length > 0){
 		    pat = pat.substring(0,pat.length-1);
 		    showComposition(pat);
 		    searchAndShowCands();
