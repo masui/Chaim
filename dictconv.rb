@@ -14,7 +14,7 @@ class DictEntry
     @word = word
     @inConnection = inConnection
     @outConnection = outConnection
-    @keylink = nil
+    @keyLink = nil
     @connectionLink = nil
   end
 end
@@ -31,20 +31,12 @@ ARGF.each { |line|
   dict << DictEntry.new(a[0],a[1],a[2].to_i,a[3].to_i)
 }
 
-puts "const dictData = ["
-dict.each_with_index { |entry,i|
-  comma = (i == dict.length-1 ? "" : ",")
-  puts "  [\"#{entry.pat}\", \"#{entry.word}\", #{entry.inConnection}, #{entry.outConnection}, #{entry.keyLink}, #{entry.connectionLink}]#{comma}"
-}
-puts "];"
-
 keyLink = []
 connectionLink = []
 # initLink()
 #
 # 先頭読みが同じ単語のリスト
 #
-puts
 puts "var keyLink = [];"
 cur = []
 dict.each_with_index { |entry,i|
@@ -81,5 +73,12 @@ dict.each_with_index { |entry,i|
   entry.connectionLink = "null" # リンクの末尾
 }
 
+puts
+puts "const dictData = ["
+dict.each_with_index { |entry,i|
+  comma = (i == dict.length-1 ? "" : ",")
+  puts "  [\"#{entry.pat}\", \"#{entry.word}\", #{entry.inConnection}, #{entry.outConnection}, #{entry.keyLink}, #{entry.connectionLink}]#{comma}"
+}
+puts "];"
 
 
