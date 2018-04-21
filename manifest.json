@@ -14,25 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 {
-  "name": "Lexierra",
-  "version": "0.0.1",
-  "manifest_version": 2,
-  "description": "Japanese text input for ChromeOS",
-  "background": {
-    "scripts": ["main.js"]
-  },
-  "permissions": [
-    "input"
-  ],
-  "input_components": [
-    {
-      "name": "Lexierra",
-      "type": "ime",
-      "id": "Lexierra.com.pitecan",
-      "description": "Japanese text input for ChromeOS",
-      "language": "ja",
-      "layouts": ["us"]
-    }
-  ]
+    "name": "Lexierra",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "description": "Japanese text input for ChromeOS",
+    "background": {
+	"scripts": [
+	    "main.js",
+	    "romakana.js",
+	    "dictdata.js",
+	    "dict.js"
+	]
+    },
+    "permissions": [
+	"input"
+    ],
+    "input_components": [
+	{
+	    "name": "Lexierra",
+	    "type": "ime",
+	    "id": "Lexierra.com.pitecan",
+	    "description": "Japanese text input for ChromeOS",
+	    "language": "ja",
+	    "layouts": ["us"]
+	}
+    ]
 }
 

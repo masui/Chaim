@@ -17,6 +17,10 @@ var contextID = -1;
 var lastRemappedKeyEvent = undefined;
 var ctrlKey = false;
 
+var japaneseMode = false;
+var pat = ""; // 日本語入力パタン e.g. "masui"
+var candidates = [];
+
 chrome.input.ime.onFocus.addListener(function(context) {
   contextID = context.contextID;
 });
@@ -43,6 +47,32 @@ chrome.input.ime.onKeyEvent.addListener(
             return false;
 	}
 
+	if (keyData.type == "keydown" && keyData.key == "x"){
+	    chrome.input.ime.setCandidateWindowProperties({
+		engineID:engineID,
+		properties:{
+		    visible:true,
+		    cursorVisible:false,
+		    vertical:true,
+		    pageSize:3,
+		    auxiliaryText: "Lexierra",
+		    auxiliaryTextVisible: false
+		}
+	    });
+	    var obj = {
+		contextID:contextID,
+		text:"かんじ",
+		cursor:0,
+		selectionStart: 0,
+		selectionEnd: 2
+	    };
+	    chrome.input.ime.setComposition(obj); // 未変換文字列を表示
+
+	    return true;
+
+	    //chrome.input.ime.commitText({"contextID": contextID, "text": "xxxxxx"});
+	}
+
 	if (keyData.key == ";" && keyData.code){
 	    keyData.key = "Enter";
 	    keyData.code = "Enter";
@@ -51,6 +81,33 @@ chrome.input.ime.onKeyEvent.addListener(
 	    handled = true;
 	}
 	
+	if (keyData.type == "keydown" && keyData.code == "AltRight" && !japaneseMode){
+	    japaneseMode = true;
+	    chrome.input.ime.setCandidateWindowProperties({
+		engineID:engineID,
+		properties:{
+		    visible:true,
+		    cursorVisible:false,
+		    vertical:true,
+		    pageSize:3,
+		    auxiliaryText: "Lexierra",
+		    auxiliaryTextVisible: false
+		}
+	    });
+	    pat = "";
+	    handled = false;
+	}
+	if (keyData.type == "keydown" && keyData.code == "AltLeft" && japaneseMode){
+	    japaneseMode = false;
+	    chrome.input.ime.setCandidateWindowProperties({
+		engineID:engineID,
+		properties:{
+		    visible:false
+		}
+	    });
+	    handled = false;
+	}
+
 	if (keyData.code == "ControlRight"){
 	    keyData.ctrlKey = false;
 	    if(keyData.shiftKey){
@@ -66,7 +123,6 @@ chrome.input.ime.onKeyEvent.addListener(
 	    lastRemappedKeyEvent = keyData;
 	    handled = true;
 	}
-
 	if (keyData.key == "Ctrl"){
             //keyData.code = "ControlLeft";
             //keyData.ctrlKey = (keyData.type == "keydown");
@@ -124,6 +180,45 @@ chrome.input.ime.onKeyEvent.addListener(
             lastRemappedKeyEvent = keyData;
             handled = true;
 	}
+
+	if(japaneseMode){
+	    if(keyData.type == "keydown" && keyData.key.match(/^[a-z]$/)){
+		pat += keyData.key;
+		var obj = {
+		    contextID:contextID,
+		    text:pat,
+		    cursor:pat.length,
+		    selectionStart: 0,
+		    selectionEnd: pat.length
+		};
+		chrome.input.ime.setComposition(obj); // 未変換文字列を表示
+	    }
+
+	    // searchAndShowCands();
+
+	    candidates = [];
+	    search(pat,0,function(word,pat,connection){
+		var newword = word.replace(/\*/g,'');
+		if(candidates.indexOf(newword) < 0){
+		    candidates.push(newword);
+		}
+	    });
+	    var candlines = [];
+	    for(var i=0;i<3 && i<candidates.length;i++){
+		candlines.push({
+		    candidate:candidates[i],
+		    id:i
+		});
+	    }
+	    chrome.input.ime.setCandidates({
+		contextID:contextID,
+		candidates:candlines
+	    });
+
+
+	    return true;
+	}
+
 	
 	return handled;
     }
