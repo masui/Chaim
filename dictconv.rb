@@ -31,7 +31,7 @@ ARGF.each { |line|
   dict << DictEntry.new(a[0],a[1],a[2].to_i,a[3].to_i)
 }
 
-puts "const dict = ["
+puts "const dictData = ["
 dict.each_with_index { |entry,i|
   comma = (i == dict.length-1 ? "" : ",")
   puts "  [\"#{entry.pat}\", \"#{entry.word}\", #{entry.inConnection}, #{entry.outConnection}, #{entry.keyLink}, #{entry.connectionLink}]#{comma}"
