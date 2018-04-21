@@ -251,92 +251,93 @@ const hiragana_xtsu = "っ";
 const katakana_n = "ン";
 const katakana_xtsu = "ッ";
 
-class Romakana {
-    constructor(){ }
+//class Romakana {
+//    constructor(){ }
 
-    roma2hiragana(roma){
-	var roma = roma.toLowerCase(roma);
-	var i,ind,rk;
-	var okay = true;
-	var kana = "";
-	
-	for(ind=0;roma[ind];){
-	    for(i=0;i<rktable.length;i++){
-		rk = rktable[i];
-		var len = rk[0].length;
-		if(roma.substr(ind,len) == rk[0]){
-		    kana += rk[1];
-		    ind += len;
-		    break;
-		}
-	    }
-	    if(i >= rktable.length){
-		var r0 = roma[ind];
-		var r1 = roma[ind+1];
-		if(r0 == 'n' && "bcdfghjklmnpqrstvwxz".indexOf(r1) >= 0){
-		    kana += hiragana_n;
-		    ind++;
-		}
-		else if("bcdfghjklmpqrstvwxyz".indexOf(r0) >= 0 && r0 == r1){
-		    kana += hiragana_xtsu;
-		    ind++;
-		}
-		else if(r0 == 'n' && ! r1){
-		    kana += hiragana_n;
-		    ind++;
-		}
-		else {
-		    ind++;
-		    okay = false;
-		}
-	    }
-	}
-	return okay ? kana : "";
-    }
+function roma2hiragana(roma){
+    roma = roma.toLowerCase(roma);
+    var i,ind,rk;
+    var okay = true;
+    var kana = "";
     
-    roma2katakana(roma){
-	var roma = roma.toLowerCase(roma);
-	var i,ind,rk;
-	var okay = true;
-	var kana = "";
-	
-	for(ind=0;roma[ind];){
-	    for(i=0;i<rktable.length;i++){
-		rk = rktable[i];
-		var len = rk[0].length;
-		if(roma.substr(ind,len) == rk[0]){
-		    kana += rk[2];
-		    ind += len;
-		    break;
-		}
-	    }
-	    if(i >= rktable.length){
-		var r0 = roma[ind];
-		var r1 = roma[ind+1];
-		if(r0 == 'n' && "bcdfghjklmnpqrstvwxz".indexOf(r1) >= 0){
-		    kana += katakana_n;
-		    ind++;
-		}
-		else if("bcdfghjklmpqrstvwxyz".indexOf(r0) >= 0 && r0 == r1){
-		    kana += katakana_xtsu;
-		    ind++;
-		}
-		else if(r0 == 'n' && ! r1){
-		    kana += katakana_n;
-		    ind++;
-		}
-		else {
-		    ind++;
-		    okay = false;
-		}
+    for(ind=0;roma[ind];){
+	for(i=0;i<rktable.length;i++){
+	    rk = rktable[i];
+	    var len = rk[0].length;
+	    if(roma.substr(ind,len) == rk[0]){
+		kana += rk[1];
+		ind += len;
+		break;
 	    }
 	}
-	return okay ? kana : "";
+	if(i >= rktable.length){
+	    var r0 = roma[ind];
+	    var r1 = roma[ind+1];
+	    if(r0 == 'n' && "bcdfghjklmnpqrstvwxz".indexOf(r1) >= 0){
+		kana += hiragana_n;
+		ind++;
+	    }
+	    else if("bcdfghjklmpqrstvwxyz".indexOf(r0) >= 0 && r0 == r1){
+		kana += hiragana_xtsu;
+		ind++;
+	    }
+	    else if(r0 == 'n' && ! r1){
+		kana += hiragana_n;
+		ind++;
+	    }
+	    else {
+		ind++;
+		okay = false;
+	    }
+	}
     }
+    return okay ? kana : "";
 }
+
+function roma2katakana(roma){
+    roma = roma.toLowerCase(roma);
+    var i,ind,rk;
+    var okay = true;
+    var kana = "";
+    
+    for(ind=0;roma[ind];){
+	for(i=0;i<rktable.length;i++){
+	    rk = rktable[i];
+	    var len = rk[0].length;
+	    if(roma.substr(ind,len) == rk[0]){
+		kana += rk[2];
+		ind += len;
+		break;
+	    }
+	}
+	if(i >= rktable.length){
+	    var r0 = roma[ind];
+	    var r1 = roma[ind+1];
+	    if(r0 == 'n' && "bcdfghjklmnpqrstvwxz".indexOf(r1) >= 0){
+		kana += katakana_n;
+		ind++;
+	    }
+	    else if("bcdfghjklmpqrstvwxyz".indexOf(r0) >= 0 && r0 == r1){
+		kana += katakana_xtsu;
+		ind++;
+	    }
+	    else if(r0 == 'n' && ! r1){
+		kana += katakana_n;
+		ind++;
+	    }
+	    else {
+		ind++;
+		okay = false;
+	    }
+	}
+    }
+    return okay ? kana : "";
+}
+
 
 // module.exports = Romakana;
 
 
 // rk = new Romakana();
-// console.log(rk.roma2katakana('konjoudeyattemiru'));
+
+// console.log(roma2katakana('konjoudeyattemiru'));

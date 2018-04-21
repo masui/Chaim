@@ -215,7 +215,7 @@ chrome.input.ime.onKeyEvent.addListener(
 		handled = true;
 	    }
 	    if(keyData.type == "keydown" && keyData.key == "Enter"){
-		if(selectCand >= 0){
+		if(selectedCand >= 0){
 		    chrome.input.ime.commitText({
 			"contextID": contextID,
 			"text": selectedCand >= 0 ? candidates[selectedCand] : pat
@@ -226,6 +226,8 @@ chrome.input.ime.onKeyEvent.addListener(
 		}
 		else {
 		    candidates = [];
+		    candidates.push(roma2hiragana(pat));
+		    candidates.push(roma2katakana(pat));
 		    search(pat,1,function(word,pat,connection){
 			var newword = word.replace(/\*/g,'');
 			if(candidates.indexOf(newword) < 0){
@@ -234,7 +236,7 @@ chrome.input.ime.onKeyEvent.addListener(
 		    });
 		    selectedCand = -1;
 		    convMode = 1;
-		    searchAndShowCands();
+		    showCands();
 		}
 		handled = true;
 	    }
