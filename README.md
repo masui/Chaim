@@ -1,1 +1,3 @@
-<h1>Japanese text input on Chromebook</h1>
+<h1>Chromebook用の日本語入力システム</h1>
+
+注意! まだ全然できてませんが、なんとか作ってここに置いておく予定です。
