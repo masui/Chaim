@@ -207,12 +207,12 @@ chrome.input.ime.onKeyEvent.addListener(
 		handled = true;
 	    }
 	    if(keyData.type == "keydown" && keyData.key == " "){
-		if(selectedCand < candidates.length-1){
+		if(candidates.length > 0 && selectedCand < candidates.length-1){
 		    selectedCand += 1;
 		    showComposition(candidates[selectedCand]);
 		    showCands();
+		    handled = true;
 		}
-		handled = true;
 	    }
 	    if(keyData.type == "keydown" && keyData.key == "Enter"){
 		if(selectedCand >= 0){
@@ -221,6 +221,7 @@ chrome.input.ime.onKeyEvent.addListener(
 			"text": selectedCand >= 0 ? candidates[selectedCand] : pat
 		    });
 		    pat = "";
+		    candidates = [];
 		    selectedCand = -1;
 		    convMode = 0;
 		}
@@ -228,14 +229,14 @@ chrome.input.ime.onKeyEvent.addListener(
 		    candidates = [];
 		    candidates.push(roma2hiragana(pat));
 		    candidates.push(roma2katakana(pat));
-		    search(pat,1,function(word,pat,connection){
 			var newword = word.replace(/\*/g,'');
 			if(candidates.indexOf(newword) < 0){
 			    candidates.push(newword);
 			}
 		    });
-		    selectedCand = -1;
+		    selectedCand = 0;
 		    convMode = 1;
+		    showComposition(candidates[0]);
 		    showCands();
 		}
 		handled = true;
