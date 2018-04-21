@@ -53,9 +53,9 @@ function searchAndShowCands(){
 
 function showComposition(text){
     var obj = {
-	contextID:contextID,
-	text:text,
-	cursor:text.length,
+	contextID: contextID,
+	text: text,
+	cursor: text.length,
 	selectionStart: 0,
 	selectionEnd: text.length
     };
@@ -176,6 +176,7 @@ chrome.input.ime.onKeyEvent.addListener(
 		    visible:false
 		}
 	    });
+	    pat = "";
 	    handled = false;
 	}
 
@@ -184,24 +185,22 @@ chrome.input.ime.onKeyEvent.addListener(
 	if(japaneseMode){
 	    if(keyData.type == "keydown" && keyData.key.match(/^[a-z]$/)){
 		pat += keyData.key;
-		showComposition(pat)
-		/*
-		var obj = {
-		    contextID:contextID,
-		    text:pat,
-		    cursor:pat.length,
-		    selectionStart: 0,
-		    selectionEnd: pat.length
-		};
-		chrome.input.ime.setComposition(obj); // 未変換文字列を表示
-		 */
+		showComposition(pat);
+		searchAndShowCands();
+		handled = true;
 	    }
-
-	    searchAndShowCands();
-
-	    return true;
+	    if(keyData.type == "keydown" && keyData.key == "Backspace"){
+		if(pat.length > 0){
+		    pat = pat.substring(0,pat.length-1);
+		    showComposition(pat);
+		    searchAndShowCands();
+		    handled = true;
+		}
+		else {
+		    handled = false;
+		}
+	    }
 	}
-
 	
 	return handled;
     }
