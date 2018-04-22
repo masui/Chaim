@@ -13,7 +13,7 @@ var japaneseMode = false;
 var pat = "";              // 日本語入力パタン e.g. "masui"
 var candidates = [];
 var selectedCand = -1;
-var convMode = 0; // 0:前方一致 1:完全一致/ひらがな
+var convMode = 0;          // 0:前方一致 1:完全一致/ひらがな
 
 chrome.input.ime.onFocus.addListener(function(context) {
     contextID = context.contextID;
@@ -113,21 +113,18 @@ chrome.input.ime.onKeyEvent.addListener(
 	} else if (ctrlKey) {
 	    if(keyData.key == "n"){
 		keyData.ctrlKey = false;
-		//keyData.capsLock = false;
 		keyData.key = "Down";
 		keyData.code = "ArrowDown";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
 	    else if(keyData.key == "p"){
 		keyData.ctrlKey = false;
-		//keyData.capsLock = false;
 		keyData.key = "Up";
 		keyData.code = "ArrowUp";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
 	    else if(keyData.key == "f"){
 		keyData.ctrlKey = false;
-		//keyData.capsLock = false;
 		keyData.key = "Right";
 		keyData.code = "ArrowRight";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
@@ -138,21 +135,8 @@ chrome.input.ime.onKeyEvent.addListener(
 		keyData.code = "ArrowLeft";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
-	    /*
-	    else if(keyData.key == "a"){
-		keyData.ctrlKey = true;
-		keyData.code = "ArrowLeft";
-		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
-	    }
-	    else if(keyData.key == "e"){
-		keyData.ctrlKey = true;
-		keyData.code = "ArrowRight";
-		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
-	    }
-	     */
 	    else {
 		keyData.ctrlKey = ctrlKey;
-		//keyData.capsLock = false;
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
             lastRemappedKeyEvent = keyData;
@@ -196,8 +180,9 @@ chrome.input.ime.onKeyEvent.addListener(
 			"contextID": contextID,
 			"text": selectedCand >= 0 ? candidates[selectedCand] : pat
 		    });
-		    selectedCand = -1;
 		    pat = keyData.key;
+		    showComposition(pat);
+		    searchAndShowCands();
 		}
 		else {
 		    pat += keyData.key;
