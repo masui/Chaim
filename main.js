@@ -85,7 +85,6 @@ chrome.input.ime.onKeyEvent.addListener(
 	    lastRemappedKeyEvent = keyData;
 	    handled = true;
 	}
-	
 	if (keyData.code == "ControlRight"){
 	    keyData.ctrlKey = false;
 	    if(keyData.shiftKey){
@@ -101,13 +100,34 @@ chrome.input.ime.onKeyEvent.addListener(
 	    lastRemappedKeyEvent = keyData;
 	    handled = true;
 	}
+	/*
+	if (keyData.key == "`" && keyData.code){
+	    keyData.key = "Escape";
+	    keyData.code = "Escape";
+	    keyData.ctrlKey = true;
+	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
+	    lastRemappedKeyEvent = keyData;
+	    handled = true;
+	    return true;
+	}
+	if (keyData.code == "Escape"){
+	    if(keyData.shiftKey){
+		keyData.key = "~";
+		keyData.code = "~";
+	    }
+	    else {
+		keyData.key = "`";
+		keyData.code = "`";
+	    }
+	    keyData.shiftKey = false;
+	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
+	    lastRemappedKeyEvent = keyData;
+	    handled = true;
+	}
+	 */
+
 	if (keyData.key == "Ctrl"){
-            //keyData.code = "ControlLeft";
-            //keyData.ctrlKey = (keyData.type == "keydown");
-            //ctrlKey = keyData.ctrlKey;
 	    ctrlKey = (keyData.type == "keydown");
-            // keyData.capsLock = false;
-            // chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
             lastRemappedKeyEvent = keyData;
 	    handled = false;
 	} else if (ctrlKey) {
@@ -199,7 +219,7 @@ chrome.input.ime.onKeyEvent.addListener(
 		    handled = true;
 		}
 	    }
-	    if(keyData.type == "keydown" && (keyData.key == "Enter" || keyData.key == ';')){
+	    if(keyData.type == "keydown" && (keyData.key == "Enter" || keyData.key == ";")){
 		if(candidates.length > 0 && selectedCand >= 0){
 		    chrome.input.ime.commitText({
 			"contextID": contextID,
@@ -259,6 +279,10 @@ chrome.input.ime.onKeyEvent.addListener(
 		    handled = true;
 		}
 		else {
+		    candidates = [];
+		    selectedCand = -1;
+		    convMode = 0;
+		    showCands();
 		    handled = false;
 		}
 	    }
