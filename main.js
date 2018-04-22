@@ -78,7 +78,7 @@ chrome.input.ime.onKeyEvent.addListener(
             return false;
 	}
 
-	if (keyData.key == ";" && keyData.code){
+	if (keyData.key == ";" && keyData.code && !japaneseMode){
 	    keyData.key = "Enter";
 	    keyData.code = "Enter";
 	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
@@ -190,7 +190,7 @@ chrome.input.ime.onKeyEvent.addListener(
 	// 日本語入力処理
 
 	if(japaneseMode){
-	    if(keyData.type == "keydown" && keyData.key.match(/^[a-z]$/)){
+	    if(keyData.type == "keydown" && keyData.key.match(/^[a-z,\-\.]$/)){
 		if(selectedCand >= 0){
 		    chrome.input.ime.commitText({
 			"contextID": contextID,
@@ -214,8 +214,8 @@ chrome.input.ime.onKeyEvent.addListener(
 		    handled = true;
 		}
 	    }
-	    if(keyData.type == "keydown" && keyData.key == "Enter"){
-		if(selectedCand >= 0){
+	    if(keyData.type == "keydown" && (keyData.key == "Enter" || keyData.key == ';')){
+		if(candidates.length > 0 && selectedCand >= 0){
 		    chrome.input.ime.commitText({
 			"contextID": contextID,
 			"text": selectedCand >= 0 ? candidates[selectedCand] : pat
@@ -224,11 +224,13 @@ chrome.input.ime.onKeyEvent.addListener(
 		    candidates = [];
 		    selectedCand = -1;
 		    convMode = 0;
+		    handled = true;
 		}
-		else {
+		else if(pat.length > 0){
 		    candidates = [];
 		    candidates.push(roma2hiragana(pat));
 		    candidates.push(roma2katakana(pat));
+		    search(pat,1,function(word,pat,connection){
 			var newword = word.replace(/\*/g,'');
 			if(candidates.indexOf(newword) < 0){
 			    candidates.push(newword);
@@ -238,8 +240,20 @@ chrome.input.ime.onKeyEvent.addListener(
 		    convMode = 1;
 		    showComposition(candidates[0]);
 		    showCands();
+		    handled = true;
 		}
-		handled = true;
+		else {
+		    keyData.key = "Enter";
+		    keyData.code = "Enter";
+		    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
+		    lastRemappedKeyEvent = keyData;
+		    pat = "";
+		    candidates = [];
+		    selectedCand = -1;
+		    convMode = 0;
+		    showCands();
+		    handled = true;
+		}
 	    }
 	    if(keyData.type == "keydown" && keyData.key == "Backspace"){
 		if(selectedCand >= 0){
