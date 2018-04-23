@@ -277,7 +277,32 @@ chrome.input.ime.onKeyEvent.addListener(
 	// 日本語入力処理
 
 	if(japaneseMode){
-	    if(keyData.type == "keydown" && keyData.key.match(/^[a-z,\-\.]$/)){
+	    if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0){
+
+		var jsonRequest = new XMLHttpRequest();
+		jsonRequest.onreadystatechange = function() {
+		    if ((jsonRequest.readyState === 4) && (jsonRequest.status === 200)) {
+			var data = JSON.parse(jsonRequest.responseText);
+			console.log(data);
+			candidates = [];
+			for(var i=0;i<data[0][1].length;i++){
+			    if(candidates.indexOf(data[0][1][i]) < 0){
+				candidates.push(data[0][1][i]);
+			    }
+			}
+			selectedCand = -1;
+			showComposition(pat);
+			showCands();
+		    }
+		};
+		var hira = roma2hiragana(pat);
+		jsonRequest.open("GET",`http://google.com/transliterate?langpair=ja-Hira|ja&text=${hira}`, true);
+		jsonRequest.send(null);
+
+		showComposition(pat);
+		handled = true;
+	    }
+	    else if(keyData.type == "keydown" && keyData.key.match(/^[a-z,\-\.]$/)){
 		if(selectedCand >= 0){
 		    fix();
 		    pat = keyData.key;
