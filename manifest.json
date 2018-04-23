@@ -27,7 +27,8 @@ limitations under the License.
 	]
     },
     "permissions": [
-	"input"
+	"input",
+	"storage"
     ],
     "input_components": [
 	{

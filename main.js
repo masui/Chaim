@@ -34,14 +34,30 @@ function isRemappedEvent(keyData) {
 
 function searchAndShowCands(){
     candidates = [];
-    search(pat,0,function(word,pat,connection){
-	var newword = word.replace(/\*/g,'');
-	if(candidates.indexOf(newword) < 0){
-	    candidates.push(newword);
+
+    var localdict;
+    chrome.storage.local.get(['localdict'], function(result) {
+	localdict = result.localdict;
+	if(localdict == undefined) localdict = [];
+
+	for(var i=0;i<localdict.length;i++){
+	    var a = localdict[i].split("\t");
+	    if(a[0].startsWith(pat)){
+		if(candidates.indexOf(a[1]) < 0){
+		    candidates.push(a[1]);
+		}
+	    }
 	}
+	
+	search(pat,0,function(word,pat,connection){
+	    var newword = word.replace(/\*/g,'');
+	    if(candidates.indexOf(newword) < 0){
+		candidates.push(newword);
+	    }
+	});
+	selectedCand = -1;
+	showCands();
     });
-    selectedCand = -1;
-    showCands();
 }
 
 function showCands(){
@@ -55,6 +71,33 @@ function showCands(){
     chrome.input.ime.setCandidates({
 	contextID:contextID,
 	candidates:candmenus
+    });
+}
+
+function fix(){ // kakutei
+    // register to localdict
+    if(selectedCand >= 0){
+	var word = candidates[selectedCand];
+	var localdict;
+	var pp = pat;
+	chrome.storage.local.get(['localdict'], function(result) {
+	    localdict = result.localdict;
+	    if(localdict == undefined) localdict = [];
+	    while(true){
+		var pos = localdict.indexOf(pp+"\t"+word);
+		if(pos < 0) break;
+		localdict.splice(pos,1);
+	    }
+	    if(localdict.length > 1000) localdict.pop();
+	    localdict.unshift(pp+"\t"+word);
+	    chrome.storage.local.set({localdict: localdict}, function() {
+	    });
+	});
+    }
+
+    chrome.input.ime.commitText({
+	"contextID": contextID,
+	"text": selectedCand >= 0 ? candidates[selectedCand] : pat
     });
 }
 
@@ -74,7 +117,7 @@ chrome.input.ime.onKeyEvent.addListener(
 	var handled = false;
 
 	if (isRemappedEvent(keyData)) {
-            console.log(keyData); // TODO eventually remove
+            // console.log(keyData); // TODO eventually remove
             return false;
 	}
 
@@ -196,10 +239,7 @@ chrome.input.ime.onKeyEvent.addListener(
 	if(japaneseMode){
 	    if(keyData.type == "keydown" && keyData.key.match(/^[a-z,\-\.]$/)){
 		if(selectedCand >= 0){
-		    chrome.input.ime.commitText({
-			"contextID": contextID,
-			"text": selectedCand >= 0 ? candidates[selectedCand] : pat
-		    });
+		    fix();
 		    pat = keyData.key;
 		    showComposition(pat);
 		    searchAndShowCands();
@@ -221,10 +261,7 @@ chrome.input.ime.onKeyEvent.addListener(
 	    }
 	    if(keyData.type == "keydown" && (keyData.key == "Enter" || keyData.key == ";")){
 		if(candidates.length > 0 && selectedCand >= 0){
-		    chrome.input.ime.commitText({
-			"contextID": contextID,
-			"text": selectedCand >= 0 ? candidates[selectedCand] : pat
-		    });
+		    fix();
 		    pat = "";
 		    candidates = [];
 		    selectedCand = -1;
