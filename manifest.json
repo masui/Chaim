@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 {
-    "name": "Lexierra",
+    "name": "Chaim",
     "version": "0.0.1",
     "manifest_version": 2,
     "description": "Japanese text input for ChromeOS",
@@ -32,9 +32,9 @@ limitations under the License.
     ],
     "input_components": [
 	{
-	    "name": "Lexierra",
+	    "name": "Chaim",
 	    "type": "ime",
-	    "id": "Lexierra.com.pitecan",
+	    "id": "Chaim.com.pitecan",
 	    "description": "Japanese text input for ChromeOS",
 	    "language": "ja",
 	    "layouts": ["us"]

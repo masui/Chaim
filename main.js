@@ -15,6 +15,8 @@ var candidates = [];
 var selectedCand = -1;
 var convMode = 0;          // 0:前方一致 1:完全一致/ひらがな
 
+var selectionTime = new Date;
+
 chrome.input.ime.onFocus.addListener(function(context) {
     contextID = context.contextID;
 });
@@ -34,6 +36,17 @@ function isRemappedEvent(keyData) {
 
 function searchAndShowCands(){
     candidates = [];
+
+    curTime = new Date;
+    console.log(curTime);
+//    if(curTime - selectionTime < 10 * 1000){
+	var s = getSelection();
+	console.log("getSelection()");
+	console.log(s);
+	if(s && s != ""){
+	    candidates.push(s);
+	}
+//    }
 
     var localdict;
     chrome.storage.local.get(['localdict'], function(result) {
@@ -111,6 +124,12 @@ function showComposition(text){
     };
     chrome.input.ime.setComposition(obj); // カーソル位置に未変換文字列をアンダーライン表示
 }
+
+document.addEventListener("selectionchange", function() {
+    selectionTime = new Date;
+    console.log('Selection changed.'); 
+});
+
 
 chrome.input.ime.onKeyEvent.addListener(
     function(engineID, keyData) {
