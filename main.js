@@ -34,24 +34,37 @@ function isRemappedEvent(keyData) {
         ); // requestID would be different so we are not checking for it  
 }
 
+var localdict;
+
+//function getLocalDict(){
+//    return new Promise(
+//function(resolve){
+//	    console.log("chrome.storage");
+//	    chrome.storage.local.get(['localdict'], function(result) {
+//		localdict = result.localdict;
+//		if(localdict == undefined) localdict = [];
+//		console.log("localdict read end");
+//		resolve('');
+//	    });
+//	});
+//}
+
 function searchAndShowCands(){
     candidates = [];
 
-    curTime = new Date;
-    console.log(curTime);
+//    curTime = new Date;
+//    console.log(curTime);
 //    if(curTime - selectionTime < 10 * 1000){
-	var s = getSelection();
-	console.log("getSelection()");
-	console.log(s);
-	if(s && s != ""){
-	    candidates.push(s);
-	}
 //    }
 
-    var localdict;
-    chrome.storage.local.get(['localdict'], function(result) {
-	localdict = result.localdict;
-	if(localdict == undefined) localdict = [];
+    // storage.local.get()が非同期で呼ばれるのでasync-awaitを使う
+    (async function(){
+	//await getLocalDict();
+
+	await chrome.storage.local.get(['localdict'], function(result) {
+	    localdict = result.localdict;
+	    if(localdict == undefined) localdict = [];
+	});
 
 	for(var i=0;i<localdict.length;i++){
 	    var a = localdict[i].split("\t");
@@ -70,7 +83,7 @@ function searchAndShowCands(){
 	});
 	selectedCand = -1;
 	showCands();
-    });
+    })();
 }
 
 function showCands(){
@@ -87,24 +100,23 @@ function showCands(){
     });
 }
 
-function fix(){ // kakutei
-    // register to localdict
+function fix(){ // 確定
+    // ローカル辞書に登録
     if(selectedCand >= 0){
 	var word = candidates[selectedCand];
 	var localdict;
-	var pp = pat;
+	var entry = `${pat}\t${word}`;
 	chrome.storage.local.get(['localdict'], function(result) {
 	    localdict = result.localdict;
 	    if(localdict == undefined) localdict = [];
 	    while(true){
-		var pos = localdict.indexOf(pp+"\t"+word);
+		var pos = localdict.indexOf(entry);
 		if(pos < 0) break;
 		localdict.splice(pos,1);
 	    }
 	    if(localdict.length > 1000) localdict.pop();
-	    localdict.unshift(pp+"\t"+word);
-	    chrome.storage.local.set({localdict: localdict}, function() {
-	    });
+	    localdict.unshift(entry);
+	    chrome.storage.local.set({localdict: localdict}, function(){});
 	});
     }
 
@@ -224,6 +236,15 @@ chrome.input.ime.onKeyEvent.addListener(
             lastRemappedKeyEvent = keyData;
             handled = true;
 	}
+	/*
+	if (ctrlKey && keyData.key == "a"){
+	    keyData.ctrlKey = false;
+	    keyData.key = "Left";
+	    keyData.code = "ArrowLeft";
+	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
+	    handled = false;
+	}
+	 */
 
 	if (keyData.type == "keydown" && keyData.code == "AltRight" && !japaneseMode){
 	    japaneseMode = true;
