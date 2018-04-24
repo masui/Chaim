@@ -1,10 +1,6 @@
 //
-// romakana = new Romakana();
-// kana = romakana.roma2hiragana(hiragana_string);
+// hiragana = roma2hiragana(roma);
 //
-
-
-// const rktable = require("./rktable.json");
 
 const rktable = [
     [",", "、", "、"],
@@ -333,11 +329,3 @@ function roma2katakana(roma){
     }
     return okay ? kana : "";
 }
-
-
-// module.exports = Romakana;
-
-
-// rk = new Romakana();
-
-// console.log(roma2katakana('konjoudeyattemiru'));
