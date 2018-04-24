@@ -289,11 +289,9 @@ chrome.input.ime.onKeyEvent.addListener(
 		//
 		// 読みの後でピリオドを入力するとGoogle検索する
 		//
-
 		showComposition(pat);
 
-		var hira = roma2hiragana(pat);
-		var url = "http://google.com/transliterate?langpair=ja-Hira|ja&text=" + hira;
+		var url = "http://google.com/transliterate?langpair=ja-Hira|ja&text=" + roma2hiragana(pat);
 		fetch(url).then(function(response){
 		    return response.json();
 		}).catch(function(){
@@ -312,31 +310,6 @@ chrome.input.ime.onKeyEvent.addListener(
 		    
 		});
 		handled = true;
-
-		/*
-		var jsonRequest = new XMLHttpRequest();
-		jsonRequest.onreadystatechange = function() {
-		    if ((jsonRequest.readyState === 4) && (jsonRequest.status === 200)) {
-			var data = JSON.parse(jsonRequest.responseText);
-			console.log(data);
-			candidates = [];
-			for(var i=0;i<data[0][1].length;i++){
-			    if(candidates.indexOf(data[0][1][i]) < 0){
-				candidates.push(data[0][1][i]);
-			    }
-			}
-			selectedCand = -1;
-			showComposition(pat);
-			showCands();
-		    }
-		};
-		var hira = roma2hiragana(pat);
-		jsonRequest.open("GET",`http://google.com/transliterate?langpair=ja-Hira|ja&text=${hira}`, true);
-		jsonRequest.send(null);
-
-		showComposition(pat);
-		handled = true;
-		 */
 	    }
 	    else if(keyData.type == "keydown" && keyData.key.match(/^[a-z,\-\.\{\}\(\)]$/)){
 		if(selectedCand >= 0){
