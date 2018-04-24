@@ -40,7 +40,7 @@ var localdict;
 //    return new Promise(
 //function(resolve){
 //	    console.log("chrome.storage");
-//	    chrome.storage.local.get(['localdict'], function(result) {
+//	    chrome.storage.sync.get(['localdict'], function(result) {
 //		localdict = result.localdict;
 //		if(localdict == undefined) localdict = [];
 //		console.log("localdict read end");
@@ -57,13 +57,19 @@ function searchAndShowCands(){
 //    if(curTime - selectionTime < 10 * 1000){
 //    }
 
-    // storage.local.get()が非同期で呼ばれるのでasync-awaitを使う
+    // storage.sync.get()が非同期で呼ばれるのでasync-awaitを使う
     (async function(){
 	//await getLocalDict();
 
-	await chrome.storage.local.get(['localdict'], function(result) {
+	await chrome.storage.sync.get(['localdict'], function(result) {
 	    localdict = result.localdict;
 	    if(localdict == undefined) localdict = [];
+	});
+
+	await chrome.storage.sync.get(['selection'], function(result) {
+	    var selection = result.selection;
+	    console.log(`selection=${selection}`);
+	    if(selection) candidates.push(selection);
 	});
 
 	for(var i=0;i<localdict.length;i++){
@@ -106,7 +112,7 @@ function fix(){ // 確定
 	var word = candidates[selectedCand];
 	var localdict;
 	var entry = `${pat}\t${word}`;
-	chrome.storage.local.get(['localdict'], function(result) {
+	chrome.storage.sync.get(['localdict'], function(result) {
 	    localdict = result.localdict;
 	    if(localdict == undefined) localdict = [];
 	    while(true){
@@ -116,7 +122,7 @@ function fix(){ // 確定
 	    }
 	    if(localdict.length > 1000) localdict.pop();
 	    localdict.unshift(entry);
-	    chrome.storage.local.set({localdict: localdict}, function(){});
+	    chrome.storage.sync.set({localdict: localdict}, function(){});
 	});
     }
 
@@ -277,7 +283,7 @@ chrome.input.ime.onKeyEvent.addListener(
 	// 日本語入力処理
 
 	if(japaneseMode){
-	    if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0){
+	    if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0 && convMode == 0){
 
 		var jsonRequest = new XMLHttpRequest();
 		jsonRequest.onreadystatechange = function() {
