@@ -40,7 +40,7 @@ var localdict;
 //    return new Promise(
 //function(resolve){
 //	    console.log("chrome.storage");
-//	    chrome.storage.sync.get(['localdict'], function(result) {
+//	    chrome.storage.local.get(['localdict'], function(result) {
 //		localdict = result.localdict;
 //		if(localdict == undefined) localdict = [];
 //		console.log("localdict read end");
@@ -57,20 +57,22 @@ function searchAndShowCands(){
 //    if(curTime - selectionTime < 10 * 1000){
 //    }
 
-    // storage.sync.get()が非同期で呼ばれるのでasync-awaitを使う
+    // storage.local.get()が非同期で呼ばれるのでasync-awaitを使う
     (async function(){
 	//await getLocalDict();
 
-	await chrome.storage.sync.get(['localdict'], function(result) {
+	await chrome.storage.local.get(['localdict'], function(result) {
 	    localdict = result.localdict;
 	    if(localdict == undefined) localdict = [];
 	});
 
-	await chrome.storage.sync.get(['selection'], function(result) {
+	/* DBを使ってみたけど動かない
+	await chrome.storage.local.get(['selection'], function(result) {
 	    var selection = result.selection;
 	    console.log(`selection=${selection}`);
 	    if(selection) candidates.push(selection);
 	});
+	 */
 
 	for(var i=0;i<localdict.length;i++){
 	    var a = localdict[i].split("\t");
@@ -112,7 +114,7 @@ function fix(){ // 確定
 	var word = candidates[selectedCand];
 	var localdict;
 	var entry = `${pat}\t${word}`;
-	chrome.storage.sync.get(['localdict'], function(result) {
+	chrome.storage.local.get(['localdict'], function(result) {
 	    localdict = result.localdict;
 	    if(localdict == undefined) localdict = [];
 	    while(true){
@@ -122,7 +124,7 @@ function fix(){ // 確定
 	    }
 	    if(localdict.length > 1000) localdict.pop();
 	    localdict.unshift(entry);
-	    chrome.storage.sync.set({localdict: localdict}, function(){});
+	    chrome.storage.local.set({localdict: localdict}, function(){});
 	});
     }
 
@@ -284,7 +286,34 @@ chrome.input.ime.onKeyEvent.addListener(
 
 	if(japaneseMode){
 	    if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0 && convMode == 0){
+		//
+		// 読みの後でピリオドを入力するとGoogle検索する
+		//
 
+		showComposition(pat);
+
+		var hira = roma2hiragana(pat);
+		var url = "http://google.com/transliterate?langpair=ja-Hira|ja&text=" + hira;
+		fetch(url).then(function(response){
+		    return response.json();
+		}).catch(function(){
+		    console.log("error caught at fetch()!");
+		}).then(function(data){
+		    candidates = [];
+		    for(var i=0;i<data[0][1].length;i++){
+			var word = data[0][1][i];
+			if(candidates.indexOf(word) < 0){
+			    candidates.push(word);
+			}
+		    }
+		    selectedCand = -1;
+		    showComposition(pat);
+		    showCands();
+		    
+		});
+		handled = true;
+
+		/*
 		var jsonRequest = new XMLHttpRequest();
 		jsonRequest.onreadystatechange = function() {
 		    if ((jsonRequest.readyState === 4) && (jsonRequest.status === 200)) {
@@ -307,8 +336,9 @@ chrome.input.ime.onKeyEvent.addListener(
 
 		showComposition(pat);
 		handled = true;
+		 */
 	    }
-	    else if(keyData.type == "keydown" && keyData.key.match(/^[a-z,\-\.]$/)){
+	    else if(keyData.type == "keydown" && keyData.key.match(/^[a-z,\-\.\{\}\(\)]$/)){
 		if(selectedCand >= 0){
 		    fix();
 		    pat = keyData.key;
