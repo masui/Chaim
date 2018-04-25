@@ -15,8 +15,6 @@ var candidates = [];
 var selectedCand = -1;
 var convMode = 0;          // 0:前方一致 1:完全一致/ひらがな
 
-var selectionTime = new Date;
-
 chrome.input.ime.onFocus.addListener(function(context) {
     contextID = context.contextID;
 });
@@ -51,11 +49,6 @@ var localdict;
 
 function searchAndShowCands(){
     candidates = [];
-
-//    curTime = new Date;
-//    console.log(curTime);
-//    if(curTime - selectionTime < 10 * 1000){
-//    }
 
     // storage.local.get()が非同期で呼ばれるのでasync-awaitを使う
     (async () => {
@@ -146,15 +139,17 @@ function showComposition(text){
     chrome.input.ime.setComposition(obj); // カーソル位置に未変換文字列をアンダーライン表示
 }
 
-document.addEventListener("selectionchange", function() {
-    selectionTime = new Date;
-    console.log('Selection changed.'); 
-});
+//document.addEventListener("selectionchange", function() {
+//    selectionTime = new Date;
+//    console.log('Selection changed.'); 
+//});
 
 
 chrome.input.ime.onKeyEvent.addListener(
     function(engineID, keyData) {
 	var handled = false;
+
+	// console.log(`key = ${keyData.key}, code=${keyData.code}, control = ${keyData.ctrlKey}`);
 
 	if (isRemappedEvent(keyData)) {
             // console.log(keyData); // TODO eventually remove
@@ -183,10 +178,10 @@ chrome.input.ime.onKeyEvent.addListener(
 	    lastRemappedKeyEvent = keyData;
 	    handled = true;
 	}
-	/*
-	if (keyData.key == "`" && keyData.code){
-	    keyData.key = "Escape";
-	    keyData.code = "Escape";
+
+	if (keyData.key == "`" && keyData.code){ // Escapeと `~ を交換
+	    keyData.key = "[";
+	    keyData.code = "BracketLeft";
 	    keyData.ctrlKey = true;
 	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    lastRemappedKeyEvent = keyData;
@@ -207,7 +202,6 @@ chrome.input.ime.onKeyEvent.addListener(
 	    lastRemappedKeyEvent = keyData;
 	    handled = true;
 	}
-	 */
 
 	if (keyData.key == "Ctrl"){
 	    ctrlKey = (keyData.type == "keydown");
