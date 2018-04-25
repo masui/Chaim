@@ -58,13 +58,14 @@ function searchAndShowCands(){
 //    }
 
     // storage.local.get()が非同期で呼ばれるのでasync-awaitを使う
-    (async function(){
+    (async () => {
 	//await getLocalDict();
 
-	await chrome.storage.local.get(['localdict'], function(result) {
+	await chrome.storage.local.get(['localdict'], (result) => {
 	    localdict = result.localdict;
 	    if(localdict == undefined) localdict = [];
 	});
+
 
 	/* DBを使ってみたけど動かない
 	await chrome.storage.local.get(['selection'], function(result) {
@@ -83,7 +84,7 @@ function searchAndShowCands(){
 	    }
 	}
 	
-	search(pat,0,function(word,pat,connection){
+	search(pat,0,(word,pat,connection) => {
 	    var newword = word.replace(/\*/g,'');
 	    if(candidates.indexOf(newword) < 0){
 		candidates.push(newword);
@@ -114,7 +115,7 @@ function fix(){ // 確定
 	var word = candidates[selectedCand];
 	var localdict;
 	var entry = `${pat}\t${word}`;
-	chrome.storage.local.get(['localdict'], function(result) {
+	chrome.storage.local.get(['localdict'], (result) => {
 	    localdict = result.localdict;
 	    if(localdict == undefined) localdict = [];
 	    while(true){
@@ -124,7 +125,7 @@ function fix(){ // 確定
 	    }
 	    if(localdict.length > 1000) localdict.pop();
 	    localdict.unshift(entry);
-	    chrome.storage.local.set({localdict: localdict}, function(){});
+	    chrome.storage.local.set({localdict: localdict}); // , function(){});
 	});
     }
 
