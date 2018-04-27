@@ -23,6 +23,7 @@ limitations under the License.
 	    "main.js",
 	    "romakana.js",
 	    "dictdata.js",
+	    "webdictdata.js",
 	    "dict.js"
 	]
     },

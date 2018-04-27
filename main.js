@@ -23,6 +23,15 @@ chrome.input.ime.onBlur.addListener(function(context) {
     contextID = -1;
 });
 
+//fetchできない
+//fetch('https://scrapbox.io/api/pages/masui/dict/text') // , {mode: 'cors'} )
+//    .then(function(response) {
+//        return response.text();
+//    })
+//    .then(function(text){
+//        console.log(text);
+//    });
+
 function isRemappedEvent(keyData) {  
     // hack, should check for a sender ID (to be added to KeyData)
     return lastRemappedKeyEvent != undefined &&
@@ -73,6 +82,17 @@ function searchAndShowCands(){
 	    if(a[0].startsWith(pat)){
 		if(candidates.indexOf(a[1]) < 0){
 		    candidates.push(a[1]);
+		}
+	    }
+	}
+
+	//
+	// Scrapboxの辞書利用
+	//
+	for(var i=0;i<webdict.length;i++){
+	    if(webdict[i][0].startsWith(pat)){
+		if(candidates.indexOf(webdict[i][1]) < 0){
+		    candidates.push(webdict[i][1]);
 		}
 	    }
 	}
