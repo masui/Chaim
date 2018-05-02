@@ -68,7 +68,6 @@ function searchAndShowCands(){
 	    if(localdict == undefined) localdict = [];
 	});
 
-
 	/* DBを使ってみたけど動かない
 	await chrome.storage.local.get(['selection'], function(result) {
 	    var selection = result.selection;
@@ -88,6 +87,7 @@ function searchAndShowCands(){
 
 	//
 	// Scrapboxの辞書利用
+	// https://scrapbox.io/masui/dict
 	//
 	for(var i=0;i<webdict.length;i++){
 	    if(webdict[i][0].startsWith(pat)){
@@ -293,6 +293,9 @@ chrome.input.ime.onKeyEvent.addListener(
 		    visible:false
 		}
 	    });
+	    fix();
+	    candidates = [];
+	    selecteCand = -1;
 	    pat = "";
 	    handled = false;
 	}
