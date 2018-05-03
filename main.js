@@ -329,7 +329,7 @@ chrome.input.ime.onKeyEvent.addListener(
 		});
 		handled = true;
 	    }
-	    else if(keyData.type == "keydown" && keyData.key.match(/^[a-z,\-\.\{\}\(\)]$/)){
+	    else if(keyData.type == "keydown" && keyData.key.match(/^[a-z0-9,'\-\.\{\}\(\)]$/)){
 		if(selectedCand >= 0){
 		    fix();
 		    pat = keyData.key;
