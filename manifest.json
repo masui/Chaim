@@ -20,7 +20,7 @@ limitations under the License.
     "description": "Japanese text input for ChromeOS",
     "background": {
 	"scripts": [
-	    "main.js",
+	    "chaim.js",
 	    "romakana.js",
 	    "dictdata.js",
 	    "webdictdata.js",
