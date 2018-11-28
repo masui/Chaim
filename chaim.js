@@ -252,6 +252,12 @@ chrome.input.ime.onKeyEvent.addListener(
 		keyData.code = "ArrowLeft";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
+	    //
+	    // .emacs あたりで
+	    //   (global-set-key [C-right] 'move-end-of-line)
+	    //   (global-set-key [C-left] 'move-beginning-of-line)
+	    // をセットしておく
+	    //
 	    else if(keyData.key == "a"){
 	    	keyData.ctrlKey = true;
 		keyData.key = "Left";
