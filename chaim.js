@@ -252,6 +252,18 @@ chrome.input.ime.onKeyEvent.addListener(
 		keyData.code = "ArrowLeft";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
+	    else if(keyData.key == "a"){
+	    	keyData.ctrlKey = true;
+		keyData.key = "Left";
+		keyData.code = "ArrowLeft";
+		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
+	    }
+	    else if(keyData.key == "e"){
+		keyData.ctrlKey = true;
+		keyData.key = "Right";
+		keyData.code = "ArrowRight";
+		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
+	    }
 	    else {
 		keyData.ctrlKey = ctrlKey;
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
