@@ -2,6 +2,10 @@
  * 以下から借用
  * https://github.com/google/extra-keyboards-for-chrome-os/blob/master/capslockremap/background.js
  * (IME機能でCapsLockをCtrlにするもの)
+
+ DOM event (Home, ArrowRight, etc.)
+ https://www.w3.org/TR/uievents/
+
  */
 
 var contextID = -1;
@@ -252,18 +256,12 @@ chrome.input.ime.onKeyEvent.addListener(
 		keyData.code = "ArrowLeft";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
-	    //
-	    // .emacs あたりで
-	    //   (global-set-key [C-right] 'move-end-of-line)
-	    //   (global-set-key [C-left] 'move-beginning-of-line)
-	    // をセットしておく
-	    //
-	    else if(keyData.key == "a"){ // Homeキーを
+	    else if(keyData.key == "a"){ // Ctrl-AでHomeキーを送る
 		keyData.ctrlKey = false;
 		keyData.code = "Home";
                 chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
-	    else if(keyData.key == "e"){
+	    else if(keyData.key == "e"){ // Ctrl-EでEndキーを送る
 		keyData.ctrlKey = false;
 		keyData.code = "End";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
@@ -275,15 +273,6 @@ chrome.input.ime.onKeyEvent.addListener(
             lastRemappedKeyEvent = keyData;
             handled = true;
 	}
-	/*
-	if (ctrlKey && keyData.key == "a"){
-	    keyData.ctrlKey = false;
-	    keyData.key = "Left";
-	    keyData.code = "ArrowLeft";
-	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
-	    handled = false;
-	}
-	 */
 
 	if (keyData.type == "keydown" && keyData.code == "AltRight" && !japaneseMode){
 	    japaneseMode = true;
