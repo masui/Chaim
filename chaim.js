@@ -258,18 +258,16 @@ chrome.input.ime.onKeyEvent.addListener(
 	    //   (global-set-key [C-left] 'move-beginning-of-line)
 	    // をセットしておく
 	    //
-	    else if(keyData.key == "a"){
-	    	keyData.ctrlKey = true;
-		keyData.key = "Left";
-		keyData.code = "ArrowLeft";
-		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
+	    else if(keyData.key == "a"){ // Homeキーを
+		keyData.ctrlKey = false;
+		keyData.code = "Home";
+                chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
 	    else if(keyData.key == "e"){
-		keyData.ctrlKey = true;
-		keyData.key = "Right";
-		keyData.code = "ArrowRight";
+		keyData.ctrlKey = false;
+		keyData.code = "End";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
-	    }
+   	    }
 	    else {
 		keyData.ctrlKey = ctrlKey;
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
