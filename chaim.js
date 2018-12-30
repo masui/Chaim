@@ -35,6 +35,9 @@ chrome.input.ime.onBlur.addListener(function(context) {
 //    .then(function(text){
 //        console.log(text);
 //    });
+function f(){
+  // console.log(process.env);
+}
 
 function isRemappedEvent(keyData) {  
     // hack, should check for a sender ID (to be added to KeyData)
@@ -62,6 +65,7 @@ var localdict;
 
 function searchAndShowCands(){
     candidates = [];
+    f();
 
     // storage.local.get()が非同期で呼ばれるのでasync-awaitを使う
     (async () => {
@@ -168,6 +172,10 @@ function showComposition(text){
 //    console.log('Selection changed.'); 
 //});
 
+chrome.input.ime.onActivate.addListener(function(engineID, screen){
+  console.log(`screen = ${screen}`);
+});
+
 
 chrome.input.ime.onKeyEvent.addListener(
     function(engineID, keyData) {
@@ -258,11 +266,13 @@ chrome.input.ime.onKeyEvent.addListener(
 	    }
 	    else if(keyData.key == "a"){ // Ctrl-AでHomeキーを送る
 		keyData.ctrlKey = false;
+                //keyData.key = "Space";
 		keyData.code = "Home";
                 chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
 	    else if(keyData.key == "e"){ // Ctrl-EでEndキーを送る
 		keyData.ctrlKey = false;
+                //keyData.key = "Space" // ?????
 		keyData.code = "End";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
    	    }
