@@ -181,7 +181,7 @@ chrome.input.ime.onKeyEvent.addListener(
     function(engineID, keyData) {
 	var handled = false;
 
-	// console.log(`key = ${keyData.key}, code=${keyData.code}, control = ${keyData.ctrlKey}`);
+	console.log(`key = ${keyData.key}, code=${keyData.code}, control = ${keyData.ctrlKey}`);
 
 	if (isRemappedEvent(keyData)) {
             // console.log(keyData); // TODO eventually remove
@@ -300,6 +300,22 @@ chrome.input.ime.onKeyEvent.addListener(
 	    pat = "";
 	    handled = false;
 	}
+ 	if (keyData.code == "ContextMenu"){
+	    japaneseMode = true;
+	    chrome.input.ime.setCandidateWindowProperties({
+		engineID:engineID,
+		properties:{
+		    visible:true,
+		    cursorVisible:false,
+		    vertical:true,
+		    pageSize:3,
+		    auxiliaryText: "Lexierra",
+		    auxiliaryTextVisible: false
+		}
+	    });
+	    pat = "";
+	    handled = true;
+	}
 	if (keyData.type == "keydown" && keyData.code == "AltLeft" && japaneseMode){
 	    japaneseMode = false;
 	    chrome.input.ime.setCandidateWindowProperties({
@@ -313,6 +329,21 @@ chrome.input.ime.onKeyEvent.addListener(
 	    selecteCand = -1;
 	    pat = "";
 	    handled = false;
+	}
+	if (keyData.code == "MetaLeft"){
+	    console.log("type = " + keyData.type);
+	    japaneseMode = false;
+	    chrome.input.ime.setCandidateWindowProperties({
+		engineID:engineID,
+		properties:{
+		    visible:false
+		}
+	    });
+	    fix();
+	    candidates = [];
+	    selecteCand = -1;
+	    pat = "";
+	    handled = true;
 	}
 
 	// 日本語入力処理
