@@ -11,6 +11,7 @@ webdict:
 # Chromeエクステンション公開用のzipを作る
 # Dashboard
 # https://chrome.google.com/webstore/developer/dashboard/g00750819356671613953?hl=ja
+# https://chrome.google.com/webstore/detail/chaim/nbakiigeihdkfihjnahbagdahgoanedd?hl=ja
 #
 ZIPFILES=manifest.json chaim.js dictdata.js dict.js romakana.js webdictdata.js icons
 zip:
