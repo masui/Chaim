@@ -27,18 +27,6 @@ chrome.input.ime.onBlur.addListener(function(context) {
     contextID = -1;
 });
 
-//fetchできない
-//fetch('https://scrapbox.io/api/pages/masui/dict/text') // , {mode: 'cors'} )
-//    .then(function(response) {
-//        return response.text();
-//    })
-//    .then(function(text){
-//        console.log(text);
-//    });
-function f(){
-  // console.log(process.env);
-}
-
 function isRemappedEvent(keyData) {  
     // hack, should check for a sender ID (to be added to KeyData)
     return lastRemappedKeyEvent != undefined &&
@@ -65,7 +53,6 @@ var localdict = [];
 
 function searchAndShowCands(){
     candidates = [];
-    f();
 
     // storage.local.get()が非同期で呼ばれるのでasync-awaitを使う
     (async () => {
@@ -77,11 +64,11 @@ function searchAndShowCands(){
 	});
 
 	// DBを使ってみたけど動かない
-	await chrome.storage.local.get(['selection'], function(result) {
-	    var selection = result.selection;
-	    console.log(`selection=${selection}`);
-	    //if(selection) candidates.push(selection);
-	});
+	//await chrome.storage.local.get(['selection'], function(result) {
+	//    var selection = result.selection;
+	//    console.log(`selection=${selection}`);
+	//    //if(selection) candidates.push(selection);
+	//});
 
 	for(var i=0;i<localdict.length;i++){
 	    var a = localdict[i].split("\t");
@@ -130,18 +117,6 @@ function showCands(){
 }
 
 function fix(){ // 確定
-
-    /*
-     console.log("Fix()");
-     console.log(`navigator = ${navigator}`);
-     navigator.clipboard.readText().then(function(data) {
-     console.log("Your string:" + data);
-     }).catch(()=> {
-     console.log("Fail");
-     })
-   */
-    a = 19
-  
     // ローカル辞書に登録
     if(selectedCand >= 0){
 	var word = candidates[selectedCand];
@@ -178,15 +153,15 @@ function showComposition(text){
     chrome.input.ime.setComposition(obj); // カーソル位置に未変換文字列をアンダーライン表示
 }
 
-// ugokanai...
-document.addEventListener("selectionchange", function() {
-    selectionTime = new Date;
-    console.log('Selection changed.'); 
-});
+// 動かない
+//document.addEventListener("selectionchange", function() {
+//    selectionTime = new Date;
+//    console.log('Selection changed.'); 
+//});
 
-chrome.input.ime.onActivate.addListener(function(engineID, screen){
-  console.log(`screen = ${screen}`);
-});
+//chrome.input.ime.onActivate.addListener(function(engineID, screen){
+//  console.log(`screen = ${screen}`);
+//});
 
 
 chrome.input.ime.onKeyEvent.addListener(
@@ -200,13 +175,19 @@ chrome.input.ime.onKeyEvent.addListener(
             return false;
 	}
 
+	//
+	// セミコロンを改行キーに
+	//
 	if (keyData.key == ";" && keyData.code && !japaneseMode){
 	    keyData.key = "Enter";
 	    keyData.code = "Enter";
 	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    lastRemappedKeyEvent = keyData;
-	    handled = true;
+	    return true;
 	}
+	//
+	// 右コントロールをセミコロンに
+	//
 	if (keyData.code == "ControlRight"){
 	    keyData.ctrlKey = false;
 	    if(keyData.shiftKey){
@@ -220,10 +201,12 @@ chrome.input.ime.onKeyEvent.addListener(
 	    keyData.shiftKey = false;
 	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    lastRemappedKeyEvent = keyData;
-	    handled = true;
+	    return true;
 	}
-
-	if (keyData.key == "`" && keyData.code){ // Escapeと `~ を交換
+	//
+	// "`" をEscape (Ctrl-[)に
+	//
+	if (keyData.key == "`" && keyData.code){
 	    keyData.key = "[";
 	    keyData.code = "BracketLeft";
 	    keyData.ctrlKey = true;
@@ -232,6 +215,9 @@ chrome.input.ime.onKeyEvent.addListener(
 	    handled = true;
 	    return true;
 	}
+	//
+	// Escapeを"~"に
+	//
 	if (keyData.code == "Escape"){
 	    if(keyData.shiftKey){
 		keyData.key = "~";
@@ -245,6 +231,7 @@ chrome.input.ime.onKeyEvent.addListener(
 	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    lastRemappedKeyEvent = keyData;
 	    handled = true;
+	    return true;
 	}
 
 	if (keyData.key == "Ctrl"){
@@ -361,7 +348,8 @@ chrome.input.ime.onKeyEvent.addListener(
 	// 日本語入力処理
 
 	if(japaneseMode){
-	    if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0 && convMode == 0){
+	    //if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0 && convMode == 0){
+	    if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0){
 		//
 		// 読みの後でピリオドを入力するとGoogle検索する
 		//
