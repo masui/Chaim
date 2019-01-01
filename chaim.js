@@ -38,19 +38,6 @@ function isRemappedEvent(keyData) {
 
 var localdict = [];
 
-//function getLocalDict(){
-//    return new Promise(
-//function(resolve){
-//	    console.log("chrome.storage");
-//	    chrome.storage.local.get(['localdict'], function(result) {
-//		localdict = result.localdict;
-//		if(localdict == undefined) localdict = [];
-//		console.log("localdict read end");
-//		resolve('');
-//	    });
-//	});
-//}
-
 function searchAndShowCands(){
     candidates = [];
 
@@ -63,13 +50,6 @@ function searchAndShowCands(){
 	    if(localdict == undefined) localdict = [];
 	});
 
-	// DBを使ってみたけど動かない
-	//await chrome.storage.local.get(['selection'], function(result) {
-	//    var selection = result.selection;
-	//    console.log(`selection=${selection}`);
-	//    //if(selection) candidates.push(selection);
-	//});
-
 	for(var i=0;i<localdict.length;i++){
 	    var a = localdict[i].split("\t");
 	    if(a[0].startsWith(pat)){
@@ -79,18 +59,6 @@ function searchAndShowCands(){
 	    }
 	}
 
-	//
-	// Scrapboxの辞書利用
-	// https://scrapbox.io/masui/dict
-	//
-	//for(var i=0;i<webdict.length;i++){
-	//    if(webdict[i][0].startsWith(pat)){
-	//	if(candidates.indexOf(webdict[i][1]) < 0){
-	//	    candidates.push(webdict[i][1]);
-	//	}
-	//    }
-	//}
-	
 	search(pat,0,(word,pat,connection) => {
 	    var newword = word.replace(/\*/g,'');
 	    if(candidates.indexOf(newword) < 0){
@@ -153,17 +121,6 @@ function showComposition(text){
     chrome.input.ime.setComposition(obj); // カーソル位置に未変換文字列をアンダーライン表示
 }
 
-// 動かない
-//document.addEventListener("selectionchange", function() {
-//    selectionTime = new Date;
-//    console.log('Selection changed.'); 
-//});
-
-//chrome.input.ime.onActivate.addListener(function(engineID, screen){
-//  console.log(`screen = ${screen}`);
-//});
-
-
 chrome.input.ime.onKeyEvent.addListener(
     function(engineID, keyData) {
 	var handled = false;
@@ -212,7 +169,6 @@ chrome.input.ime.onKeyEvent.addListener(
 	    keyData.ctrlKey = true;
 	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    lastRemappedKeyEvent = keyData;
-	    handled = true;
 	    return true;
 	}
 	//
@@ -230,7 +186,6 @@ chrome.input.ime.onKeyEvent.addListener(
 	    keyData.shiftKey = false;
 	    chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    lastRemappedKeyEvent = keyData;
-	    handled = true;
 	    return true;
 	}
 
@@ -238,7 +193,9 @@ chrome.input.ime.onKeyEvent.addListener(
 	    ctrlKey = (keyData.type == "keydown");
             lastRemappedKeyEvent = keyData;
 	    handled = false;
-	} else if (ctrlKey) {
+	    return false;
+	}
+	if (ctrlKey) {
 	    if(keyData.key == "n"){
 		keyData.ctrlKey = false;
 		keyData.key = "Down";
@@ -265,13 +222,11 @@ chrome.input.ime.onKeyEvent.addListener(
 	    }
 	    else if(keyData.key == "a"){ // Ctrl-AでHomeキーを送る
 		keyData.ctrlKey = false;
-                //keyData.key = "Space";
 		keyData.code = "Home";
                 chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
 	    else if(keyData.key == "e"){ // Ctrl-EでEndキーを送る
 		keyData.ctrlKey = false;
-                //keyData.key = "Space" // ?????
 		keyData.code = "End";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
    	    }
@@ -281,6 +236,7 @@ chrome.input.ime.onKeyEvent.addListener(
 	    }
             lastRemappedKeyEvent = keyData;
             handled = true;
+	    return handled;
 	}
 
 	if (keyData.type == "keydown" && keyData.code == "AltRight" && !japaneseMode){
