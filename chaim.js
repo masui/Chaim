@@ -48,7 +48,7 @@ function isRemappedEvent(keyData) {
         ); // requestID would be different so we are not checking for it  
 }
 
-var localdict;
+var localdict = [];
 
 //function getLocalDict(){
 //    return new Promise(
@@ -76,13 +76,12 @@ function searchAndShowCands(){
 	    if(localdict == undefined) localdict = [];
 	});
 
-	/* DBを使ってみたけど動かない
+	// DBを使ってみたけど動かない
 	await chrome.storage.local.get(['selection'], function(result) {
 	    var selection = result.selection;
 	    console.log(`selection=${selection}`);
-	    if(selection) candidates.push(selection);
+	    //if(selection) candidates.push(selection);
 	});
-	 */
 
 	for(var i=0;i<localdict.length;i++){
 	    var a = localdict[i].split("\t");
@@ -97,13 +96,13 @@ function searchAndShowCands(){
 	// Scrapboxの辞書利用
 	// https://scrapbox.io/masui/dict
 	//
-	for(var i=0;i<webdict.length;i++){
-	    if(webdict[i][0].startsWith(pat)){
-		if(candidates.indexOf(webdict[i][1]) < 0){
-		    candidates.push(webdict[i][1]);
-		}
-	    }
-	}
+	//for(var i=0;i<webdict.length;i++){
+	//    if(webdict[i][0].startsWith(pat)){
+	//	if(candidates.indexOf(webdict[i][1]) < 0){
+	//	    candidates.push(webdict[i][1]);
+	//	}
+	//    }
+	//}
 	
 	search(pat,0,(word,pat,connection) => {
 	    var newword = word.replace(/\*/g,'');
@@ -131,6 +130,18 @@ function showCands(){
 }
 
 function fix(){ // 確定
+
+    /*
+     console.log("Fix()");
+     console.log(`navigator = ${navigator}`);
+     navigator.clipboard.readText().then(function(data) {
+     console.log("Your string:" + data);
+     }).catch(()=> {
+     console.log("Fail");
+     })
+   */
+    a = 19
+  
     // ローカル辞書に登録
     if(selectedCand >= 0){
 	var word = candidates[selectedCand];
@@ -167,10 +178,11 @@ function showComposition(text){
     chrome.input.ime.setComposition(obj); // カーソル位置に未変換文字列をアンダーライン表示
 }
 
-//document.addEventListener("selectionchange", function() {
-//    selectionTime = new Date;
-//    console.log('Selection changed.'); 
-//});
+// ugokanai...
+document.addEventListener("selectionchange", function() {
+    selectionTime = new Date;
+    console.log('Selection changed.'); 
+});
 
 chrome.input.ime.onActivate.addListener(function(engineID, screen){
   console.log(`screen = ${screen}`);
