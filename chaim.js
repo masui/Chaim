@@ -19,12 +19,19 @@ var candidates = [];
 var selectedCand = -1;
 var convMode = 0;          // 0:前方一致 1:完全一致/ひらがな
 
+var onChrome = false; // Chromeかどうか
+
 chrome.input.ime.onFocus.addListener(function(context) {
     contextID = context.contextID;
 });
 
 chrome.input.ime.onBlur.addListener(function(context) {
     contextID = -1;
+});
+
+chrome.windows.onFocusChanged.addListener(function(winid) {
+    console.log(`FocusChanged: id=${winid}`);
+    onChrome = (winid == 1); // Chromeのときはwinidが小さな値になる模様
 });
 
 function isRemappedEvent(keyData) {  
@@ -220,12 +227,12 @@ chrome.input.ime.onKeyEvent.addListener(
 		keyData.code = "ArrowLeft";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
-	    else if(keyData.key == "a"){ // Ctrl-AでHomeキーを送る
+	    else if(keyData.key == "a" && onChrome){ // Ctrl-AでHomeキーを送る
 		keyData.ctrlKey = false;
 		keyData.code = "Home";
                 chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
 	    }
-	    else if(keyData.key == "e"){ // Ctrl-EでEndキーを送る
+	    else if(keyData.key == "e" && onChrome){ // Ctrl-EでEndキーを送る
 		keyData.ctrlKey = false;
 		keyData.code = "End";
 		chrome.input.ime.sendKeyEvents({"contextID": contextID, "keyData": [keyData]});
@@ -422,4 +429,5 @@ chrome.input.ime.onKeyEvent.addListener(
 	return handled;
     }
 );
+
 
