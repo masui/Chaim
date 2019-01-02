@@ -1,3 +1,4 @@
+
 /*
  * 以下から借用
  * https://github.com/google/extra-keyboards-for-chrome-os/blob/master/capslockremap/background.js
@@ -31,7 +32,9 @@ chrome.input.ime.onBlur.addListener(function(context) {
 
 chrome.windows.onFocusChanged.addListener(function(winid) {
     console.log(`FocusChanged: id=${winid}`);
-    onChrome = (winid == 1); // Chromeのときはwinidが小さな値になる模様
+    chrome.windows.getCurrent(function(window){
+	onChrome = (window.type == "normal");
+    });
 });
 
 function isRemappedEvent(keyData) {  

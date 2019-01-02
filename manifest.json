@@ -1,7 +1,7 @@
 {
     "name": "Chaim",
     "short_name": "Chaim",
-    "version": "0.0.5",
+    "version": "0.0.7",
     "manifest_version": 2,
     "description": "Japanese text input for ChromeOS",
     "background": {
