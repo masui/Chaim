@@ -19,7 +19,8 @@ function generateCand(connection, pat, foundword, foundpat, callback){
 		callback(foundword+dictData[d][1], foundpat+dictData[d][0], dictData[d][3]);
 	    }
 	}
-	else if(_searchmode == 0 && pat.startsWith(dictData[d][0])){ // connectionがあるかも
+	// else if(_searchmode == 0 && pat.startsWith(dictData[d][0])){ // connectionがあるかも
+	else if(pat.startsWith(dictData[d][0])){ // connectionがあるかも
             var restpat = pat.substring(dictData[d][0].length,pat.length);
 	    if(dictData[d][3] != 0){
 		generateCand(dictData[d][3], restpat, foundword+dictData[d][1], foundpat+dictData[d][0], callback);
