@@ -114,10 +114,17 @@ function fix(){ // 確定
 	});
     }
 
-    chrome.input.ime.commitText({
-	"contextID": contextID,
-	"text": selectedCand >= 0 ? candidates[selectedCand] : pat
-    });
+    if(contextID != -1){
+	var text = pat;
+	if(selectedCand >= 0 && candidates && candidates[selectedCand]){
+	    text = candidates[selectedCand];
+	}
+	if(! text) text = "";
+	chrome.input.ime.commitText({
+	    "contextID": contextID,
+	    "text": text
+	});
+    }
 }
 
 function showComposition(text){
