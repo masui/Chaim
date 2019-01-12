@@ -1,8 +1,9 @@
-copy:
-	cd ..; cp -r Chaim /home/masui/SD
+dict: chaimdict
+	ruby dictconv.rb < chaimdict.txt > dictdata.js
 
-dict:
-	ruby dictconv.rb < dict.txt > dictdata.js
+chaimdict:
+	cd ../Gictionary; make chaimdict;
+	/bin/cp ../Gictionary/chaimdict.txt .
 
 webdict:
 	wget https://scrapbox.io/api/pages/masui/dict/text -q -O - | ruby webdictconv.rb > webdictdata.js
