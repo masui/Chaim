@@ -1,6 +1,4 @@
 function search(pat,searchmode,callback){
-    _searchmode = searchmode;
-    _candidates = [];
     generateCand(pat, searchmode, callback, null, "", "");
 }
 
