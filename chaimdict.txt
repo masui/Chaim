@@ -2123,7 +2123,7 @@ ennbann	円板	16	17
 bikou	備考	7	8
 momose	百瀬	5	6
 souki	早期	7	8
-teduyo	手強	35	36
+tegowa	手強	35	36
 kuroji	黒字	113	
 kurozi	黒字	113	
 kuroji	黒字	7	8
@@ -2167,6 +2167,8 @@ shouji	東海林	5	6
 shouzi	東海林	5	6
 syouji	東海林	5	6
 syouzi	東海林	5	6
+toukairin	東海林	5	6
+toukairinn	東海林	5	6
 ha	吐	42	43
 tsukiso	付き添	40	41
 tukiso	付き添	40	41
@@ -4606,6 +4608,7 @@ saisyougenn	最小限	7	8
 korai	古来	20	
 korai	古来	7	8
 zaiku	細工	7	8
+saiku	細工	7	8
 akari	灯り	7	8
 kaette	却って	20	
 okusoko	奥底	7	8
@@ -16961,7 +16964,6 @@ keii	経緯	16	17
 keii	経緯	7	8
 toraberu	トラベル	7	8
 toitada	問いただ	21	22
-ku	い形容詞	36	
 matsu	祭	11	12
 matu	祭	11	12
 sai	祭	7	8
@@ -25659,10 +25661,11 @@ kamoshida	醸し出	21	22
 kamosida	醸し出	21	22
 kaomoji	＼(^o^)／	100	
 kaomozi	＼(^o^)／	100	
+owata	＼(^o^)／	100	
 nande	何で	20	
 nannde	何で	20	
-kansei	陥穽	7	209
-kannsei	陥穽	7	209
+kansei	陥穽	7	
+kannsei	陥穽	7	
 kasei	家政	7	8
 mashi	まし	14	15
 masi	まし	14	15
@@ -25801,7 +25804,7 @@ saburu-chinn	サブルーチン	7	8
 saburu-tin	サブルーチン	7	8
 saburu-tinn	サブルーチン	7	8
 kitano	北野	5	6
-kitano	北野	210	211
+kitano	北野	209	210
 hencho	編著	7	8
 hentyo	編著	7	8
 henncho	編著	7	8
@@ -25922,7 +25925,8 @@ henkei	変形	7	8
 hennkei	変形	7	8
 owabi	お詫び	7	8
 be-subo-ru	ベースボール	7	8
-yuki	☃	212	126
+yuki	☃	126	
+yukidaruma	☃	126	
 handoutai	半導体	7	8
 hanndoutai	半導体	7	8
 kyourin	杏林	1	2
@@ -26121,12 +26125,12 @@ n	*ん*	172	193
 nn	*ん*	172	193
 n	*ん*	172	207
 nn	*ん*	172	207
-n	*ん*	172	213
-nn	*ん*	172	213
-n	*ん*	50	213
-nn	*ん*	50	213
-n	*ん*	39	213
-nn	*ん*	39	213
+n	*ん*	172	211
+nn	*ん*	172	211
+n	*ん*	50	211
+nn	*ん*	50	211
+n	*ん*	39	211
+nn	*ん*	39	211
 n	*ん*	172	192
 nn	*ん*	172	192
 ekimae	駅前	58	
@@ -26411,8 +26415,8 @@ munasi	虚し	35	36
 konpairu	コンパイル	7	8
 konnpairu	コンパイル	7	8
 kurabe	比べ	9	10
-ja	*じゃ*	213	194
-zya	*じゃ*	213	194
+ja	*じゃ*	211	194
+zya	*じゃ*	211	194
 enshuu	演習	7	8
 ensyuu	演習	7	8
 ennshuu	演習	7	8
@@ -27908,6 +27912,7 @@ ku	*く	53	163
 ku	*く	53	32
 ku	*く	86	37
 ku	*く	86	76
+ku	*く	36	
 ichizoku	一族	66	
 itizoku	一族	66	
 ichizoku	一族	7	8
@@ -29080,8 +29085,8 @@ yakushin	躍進	7	8
 yakushinn	躍進	7	8
 yakusin	躍進	7	8
 yakusinn	躍進	7	8
-sansouken	産総研	214	
-sannsoukenn	産総研	214	
+sansouken	産総研	212	
+sannsoukenn	産総研	212	
 gunsou	軍曹	7	8
 gunnsou	軍曹	7	8
 genkyou	元凶	7	8
@@ -29378,7 +29383,7 @@ yajirusi	⇒	60
 yazirushi	⇒	60	
 yazirusi	⇒	60	
 kigou	⇒	45	
-gu-guru	Google	215	7
+gu-guru	Google	213	7
 toukyougaikokugo	東京外国語	1	2
 7	₇	177	177
 kashi	かし	7	8
@@ -31779,6 +31784,7 @@ yakkai	厄介	14	15
 teippai	手いっぱい	7	8
 gekido	激怒	13	
 gekido	激怒	7	8
+gekido	激怒	48	49
 kamata	鎌田	5	6
 kouda	幸田	5	6
 hoshi	星	129	
@@ -32463,7 +32469,7 @@ iitsuno	言い募	11	12
 iituno	言い募	11	12
 i	*い*	43	33
 i	*い*	41	31
-i	*い*	24	213
+i	*い*	24	211
 i	*い*	43	29
 i	*い*	24	192
 i	*い*	123	31
@@ -32843,8 +32849,8 @@ nagisa	渚	7	8
 tsuyo	つよ	35	36
 tuyo	つよ	35	36
 susume	進め	9	10
-ringo		126	216
-rinngo		126	216
+ringo		126	
+rinngo		126	
 hodo	ほど	57	
 hodo	ほど	42	43
 hodo	ほど	7	8
@@ -35590,7 +35596,7 @@ kotosi	ことし	7	8
 uriage	売上	7	8
 kakegoe	掛け声	7	8
 kakae	かかえ	9	10
-kyouki	驕気	7	217
+kyouki	驕気	7	
 kichitto	きちっと	20	
 kititto	きちっと	20	
 bidou	微動	7	8
@@ -35740,7 +35746,7 @@ no	の*	37	160
 no	の*	37	147
 no	の*	37	133
 no	の*	37	159
-no	の*	37	218
+no	の*	37	214
 no	の*	37	145
 no	の*	37	156
 kakkou	格好	7	8
@@ -37032,9 +37038,9 @@ manninn	満員	7	8
 ta	*た	10	53
 ta	*た	10	37
 ta	*た	51	37
-ta	*た	219	37
+ta	*た	215	37
 ta	*た	73	37
-ta	*た	219	134
+ta	*た	215	134
 ta	*た	72	37
 kaomoji	☹	100	
 kaomozi	☹	100	
@@ -37564,8 +37570,8 @@ tosho	図書	7	8
 tosyo	図書	7	8
 kasetsu	仮説	7	8
 kasetu	仮説	7	8
-koutsuu	交通	220	
-koutuu	交通	220	
+koutsuu	交通	216	
+koutuu	交通	216	
 koutsuu	交通	7	8
 koutuu	交通	7	8
 oosawa	大澤	5	6
@@ -38790,7 +38796,7 @@ hakasegou	博士号	176
 missetsu	密接	14	15
 missetu	密接	14	15
 hiza	ひざ	7	8
-wo	を	218	
+wo	を	214	
 wo	を	70	76
 wo	を	4	76
 wo	を	6	76
@@ -38886,8 +38892,8 @@ tenka	天下	7	8
 tennka	天下	7	8
 ganbou	願望	7	8
 gannbou	願望	7	8
-hoshi	ほし*	182	221
-hosi	ほし*	182	221
+hoshi	ほし*	182	217
+hosi	ほし*	182	217
 purototaipu	プロトタイプ	7	8
 age	上げ	9	10
 age	上げ	7	8
@@ -39193,8 +39199,8 @@ buraindo	ブラインド	7	8
 burainndo	ブラインド	7	8
 touji	冬至	106	
 touzi	冬至	106	
-takeshi	武	211	6
-takesi	武	211	6
+takeshi	武	210	6
+takesi	武	210	6
 bu	武	7	8
 juufuku	重複	48	49
 juuhuku	重複	48	49
@@ -39347,7 +39353,7 @@ keishiki	形式	16	17
 keisiki	形式	16	17
 keishiki	形式	7	8
 keisiki	形式	7	8
-nou	喃	222	
+nou	喃	218	
 ikigire	息切れ	7	8
 chikadu	近づ	42	43
 tikadu	近づ	42	43
@@ -39450,7 +39456,7 @@ dexina-	ディナー	7	8
 komikku	コミック	7	8
 aki	あき	9	10
 aki	あき	57	10
-i	行	223	86
+i	行	219	86
 okona	行	40	41
 i	行	42	43
 kudari	行	7	8
@@ -39843,6 +39849,7 @@ totyuu	途中	7	8
 bo-tto	ぼーっと	20	
 saseru	*させる	10	
 kiso	起訴	7	8
+kiso	起訴	48	49
 nagorioshi	名残惜し	35	36
 nagoriosi	名残惜し	35	36
 kaoawase	顔合わせ	7	8
@@ -40058,3 +40065,7 @@ daikin	代金	65	17
 daikinn	代金	65	17
 daikin	代金	7	8
 daikinn	代金	7	8
+tenpai	聴牌	101	
+tennpai	聴牌	101	
+emoji	絵文字	7	8
+emozi	絵文字	7	8

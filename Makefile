@@ -2,7 +2,7 @@ dict: chaimdict
 	ruby dictconv.rb < chaimdict.txt > dictdata.js
 
 chaimdict:
-	cd ../Gictionary; make chaimdict;
+	cd ../Gictionary; make chaim;
 	/bin/cp ../Gictionary/chaimdict.txt .
 
 webdict:

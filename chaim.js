@@ -321,8 +321,8 @@ chrome.input.ime.onKeyEvent.addListener(
 	// 日本語入力処理
 
 	if(japaneseMode){
-	    //if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0 && convMode == 0){
-	    if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0){
+	    if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0 && convMode == 0){
+		//if(keyData.type == "keydown" && keyData.key == "." && pat.length > 0){
 		//
 		// 読みの後でピリオドを入力するとGoogle検索する
 		//
