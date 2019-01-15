@@ -125,6 +125,8 @@ function fix(){ // 確定
 	    "text": text
 	});
     }
+
+    convMode = 0;
 }
 
 function showComposition(text){
@@ -433,6 +435,7 @@ chrome.input.ime.onKeyEvent.addListener(
 		    showCands();
 		    handled = false;
 		}
+		convMode = 0;
 	    }
 	}
 	
