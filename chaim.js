@@ -320,6 +320,38 @@ chrome.input.ime.onKeyEvent.addListener(
 	    handled = true;
 	}
 
+	if (keyData.code == "Lang1"){
+	    japaneseMode = true;
+	    chrome.input.ime.setCandidateWindowProperties({
+		engineID:engineID,
+		properties:{
+		    visible:true,
+		    cursorVisible:false,
+		    vertical:true,
+		    pageSize:3,
+		    auxiliaryText: "Lexierra",
+		    auxiliaryTextVisible: false
+		}
+	    });
+	    pat = "";
+	    handled = true;
+	}
+	if (keyData.code == "Lang2"){
+	    console.log("type = " + keyData.type);
+	    japaneseMode = false;
+	    chrome.input.ime.setCandidateWindowProperties({
+		engineID:engineID,
+		properties:{
+		    visible:false
+		}
+	    });
+	    fix();
+	    candidates = [];
+	    selecteCand = -1;
+	    pat = "";
+	    handled = true;
+	}
+
 	// 日本語入力処理
 
 	if(japaneseMode){

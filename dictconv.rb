@@ -78,6 +78,7 @@ puts "const dictData = ["
 dict.each_with_index { |entry,i|
   comma = (i == dict.length-1 ? "" : ",")
   puts "  [\"#{entry.pat}\", \"#{entry.word}\", #{entry.inConnection}, #{entry.outConnection}, #{entry.keyLink}, #{entry.connectionLink}]#{comma}"
+  # puts "  {pat:\"#{entry.pat}\", word:\"#{entry.word}\", out:#{entry.outConnection}, klink:#{entry.keyLink}, clink:#{entry.connectionLink}}#{comma}"
 }
 puts "];"
 
